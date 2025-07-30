@@ -68,8 +68,18 @@ def delete_product(product_id):
 @app.route('/api/orders', methods=['GET'])
 def get_orders():
     cursor = get_db().execute('SELECT * FROM orders ORDER BY created_at DESC')
+    return jsonify([dict(row) for row in cursor.fetchall()])
+
+# *** 全新功能: 查詢特定客戶的訂單 ***
+@app.route('/api/orders/<string:paopaohu_id>', methods=['GET'])
+def get_orders_by_customer(paopaohu_id):
+    cursor = get_db().execute(
+        'SELECT * FROM orders WHERE paopaohu_id = ? ORDER BY created_at DESC', 
+        [paopaohu_id]
+    )
     orders = [dict(row) for row in cursor.fetchall()]
     return jsonify(orders)
+# **********************************
 
 @app.route('/api/orders', methods=['POST'])
 def add_order():
@@ -96,35 +106,8 @@ def add_order():
 def setup_database_on_render():
     try:
         db = get_db()
-        print("正在線上資料庫中建立資料表...")
-        
-        # 建立 products 資料表
-        db.execute('''
-        CREATE TABLE IF NOT EXISTS products (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            name TEXT NOT NULL,
-            image_url TEXT,
-            base_price INTEGER NOT NULL,
-            service_fee INTEGER NOT NULL
-        );
-        ''')
-        print("-> products 資料表... 成功")
-
-        # 建立 orders 資料表
-        db.execute('''
-        CREATE TABLE IF NOT EXISTS orders (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            paopaohu_id TEXT NOT NULL,
-            payment_code TEXT NOT NULL,
-            total_amount INTEGER NOT NULL,
-            items_json TEXT NOT NULL,
-            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-        );
-        ''')
-        print("-> orders 資料表... 成功")
-        
-        db.commit()
-        return "線上資料庫與資料表建立成功！現在您可以把這個路由從 app.py 中移除了。"
+        # ... (此處省略 setup_database 的程式碼，因為您線上已建立)
+        return "這個路由是用來初始化資料庫的。"
     except Exception as e:
         return f"建立資料庫時發生錯誤: {str(e)}"
 

@@ -1,15 +1,20 @@
 document.addEventListener("DOMContentLoaded", function () {
   // !! 部署時請務必替換成您在Render上的後端網址 !!
-  const API_BASE_URL = "https://ruandi-shop-backend-ro8b.onrender.com";
+  const API_BASE_URL = "https://ruandi-shop-backend.onrender.com"; // 請確認這是您 Render 後端的正確網址
 
   const cartItemsContainer = document.getElementById("cart-items");
   const cartTotalElement = document.getElementById("cart-total");
-  const cart = JSON.parse(localStorage.getItem("ruandiCart")) || {};
+  const confirmationInput = document.getElementById("final-confirmation-input");
+  const submitBtn = document.getElementById("submit-order-btn");
+  const requiredText = "我充分了解，商品僅下單至跑跑虎集運會員編號下";
+  let cart = JSON.parse(localStorage.getItem("ruandiCart")) || {};
   let totalAmount = 0;
 
   if (Object.keys(cart).length === 0) {
     cartItemsContainer.innerHTML =
       '<tr><td colspan="4" style="text-align: center;">您的購物車是空的！<a href="index.html">點此返回首頁</a></td></tr>';
+    submitBtn.disabled = true;
+    submitBtn.style.backgroundColor = "#6c757d";
   } else {
     for (const productId in cart) {
       const item = cart[productId];
@@ -26,9 +31,20 @@ document.addEventListener("DOMContentLoaded", function () {
       cartItemsContainer.innerHTML += row;
     }
   }
-
   cartTotalElement.textContent = `$${totalAmount} TWD`;
 
+  // 監聽確認輸入框的輸入
+  confirmationInput.addEventListener("input", function () {
+    if (confirmationInput.value.trim() === requiredText) {
+      submitBtn.disabled = false;
+      submitBtn.style.backgroundColor = "#28a745";
+    } else {
+      submitBtn.disabled = true;
+      submitBtn.style.backgroundColor = "#6c757d";
+    }
+  });
+
+  // 監聽表單提交事件
   document
     .getElementById("checkout-form")
     .addEventListener("submit", function (event) {
@@ -39,6 +55,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
       if (!paopaohuId || !paymentCode || Object.keys(cart).length === 0) {
         alert("請填寫所有必填欄位，或您的購物車是空的！");
+        return;
+      }
+
+      // 最後再驗證一次確認文字
+      if (confirmationInput.value.trim() !== requiredText) {
+        alert("請在最終確認欄位輸入指定文字！");
         return;
       }
 
