@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>管理後台</title>
     <link rel="stylesheet" href="static/style.css" />
+    <style>
+      /* 新增圖片預覽樣式 */
+      #image-preview {
+        max-width: 200px;
+        max-height: 200px;
+        margin-top: 10px;
+        border: 1px solid #ddd;
+        display: none; /* 預設隱藏 */
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -15,14 +25,16 @@
         <h2>商品管理</h2>
         <form id="product-form">
           <input type="hidden" id="product-id" />
+          <input type="hidden" id="image-url" />
           <div class="form-grid">
             <div class="form-group">
               <label for="name">商品名稱</label>
               <input type="text" id="name" required />
             </div>
             <div class="form-group">
-              <label for="image-url">圖片網址</label>
-              <input type="text" id="image-url" />
+              <label for="image-upload">上傳商品圖片 (留空則不修改)</label>
+              <input type="file" id="image-upload" accept="image/*" />
+              <img id="image-preview" src="" alt="圖片預覽" />
             </div>
             <div class="form-group">
               <label for="base-price">商品基礎價 (TWD)</label>
@@ -52,6 +64,7 @@
           <thead>
             <tr>
               <th>ID</th>
+              <th>圖片</th>
               <th>名稱</th>
               <th>基礎價</th>
               <th>服務費</th>
@@ -64,22 +77,8 @@
 
       <div class="admin-section">
         <h2>訂單列表</h2>
-        <table style="width: 100%">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>下單時間</th>
-              <th>跑跑虎 ID</th>
-              <th>末五碼</th>
-              <th>總額</th>
-              <th>購買商品</th>
-            </tr>
-          </thead>
-          <tbody id="orders-list"></tbody>
-        </table>
       </div>
     </div>
-
     <script src="static/admin.js" defer></script>
   </body>
 </html>
