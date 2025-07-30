@@ -5,6 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>結帳 - 軟迪華強北直購</title>
     <link rel="stylesheet" href="static/style.css" />
+    <style>
+      /* 針對數量按鈕的微調樣式 */
+      .quantity-controls button {
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        padding: 2px 8px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+      .quantity-display {
+        display: inline-block;
+        width: 30px;
+        text-align: center;
+      }
+      .remove-btn {
+        background-color: transparent;
+        border: none;
+        color: #dc3545;
+        cursor: pointer;
+        font-size: 1.2em;
+      }
+    </style>
   </head>
   <body>
     <div
@@ -66,12 +88,29 @@
             >
               小計
             </th>
+            <th
+              style="
+                border-bottom: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+                background-color: #f8f9fa;
+              "
+            >
+              操作
+            </th>
           </tr>
         </thead>
         <tbody id="cart-items"></tbody>
         <tfoot>
           <tr style="font-weight: bold; font-size: 1.2em">
-            <td colspan="3" style="border-top: 2px solid #333; padding: 12px">
+            <td
+              colspan="4"
+              style="
+                border-top: 2px solid #333;
+                padding: 12px;
+                text-align: right;
+              "
+            >
               訂單總金額
             </td>
             <td
@@ -103,7 +142,6 @@
             placeholder="請輸入5位數字"
           />
         </div>
-
         <div
           class="form-group"
           style="
@@ -129,7 +167,6 @@
             placeholder="請完整輸入上方引號中的文字"
           />
         </div>
-
         <button
           type="submit"
           id="submit-order-btn"
