@@ -67,6 +67,41 @@ def add_order():
         return jsonify({'status': 'success'}), 201
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 400
+@app.route('/api/setup_database_on_render')
+def setup_database_on_render():
+    try:
+        db = get_db()
+        print("正在線上資料庫中建立資料表...")
+        
+        # 建立 products 資料表
+        db.execute('''
+        CREATE TABLE IF NOT EXISTS products (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            image_url TEXT,
+            base_price INTEGER NOT NULL,
+            service_fee INTEGER NOT NULL
+        );
+        ''')
+        print("-> products 資料表... 成功")
 
+        # 建立 orders 資料表
+        db.execute('''
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            paopaohu_id TEXT NOT NULL,
+            payment_code TEXT NOT NULL,
+            total_amount INTEGER NOT NULL,
+            items_json TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+        ''')
+        print("-> orders 資料表... 成功")
+        
+        db.commit()
+        return "線上資料庫與資料表建立成功！現在您可以把這個路由從 app.py 中移除了。"
+    except Exception as e:
+        return f"建立資料庫時發生錯誤: {str(e)}"
+    
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
