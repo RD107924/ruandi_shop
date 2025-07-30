@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     // !! 部署時請務必替換成您在Render上的後端網址 !!
-    const API_BASE_URL = 'https://ruandi-shop-backend.onrender.com'; // 請確認這是您 Render 後端的正確網址
+    const API_BASE_URL = 'https://ruandi-shop-backend-ro8b.onrender.com'; // 請確認這是您 Render 後端的正確網址
 
     const cartItemsContainer = document.getElementById('cart-items');
     const cartTotalElement = document.getElementById('cart-total');
