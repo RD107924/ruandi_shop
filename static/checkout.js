@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const cartTotalElement = document.getElementById("cart-total");
   const confirmationInput = document.getElementById("final-confirmation-input");
   const submitBtn = document.getElementById("submit-order-btn");
-  const requiredText = "我充分了解，商品僅下單至跑跑虎集運會員編號下";
+  const requiredText = "我了解";
 
   // 從 localStorage 讀取購物車資料
   let cart = JSON.parse(localStorage.getItem("ruandiCart")) || {};
