@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>管理後台</title>
+    <link rel="stylesheet" href="static/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>管理後台</h1>
+      <a href="index.html">返回商店首頁</a>
+
+      <div class="admin-section">
+        <h2>商品管理</h2>
+        <form id="product-form">
+          <input type="hidden" id="product-id" />
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="name">商品名稱</label>
+              <input type="text" id="name" required />
+            </div>
+            <div class="form-group">
+              <label for="image-url">圖片網址</label>
+              <input type="text" id="image-url" />
+            </div>
+            <div class="form-group">
+              <label for="base-price">商品基礎價 (TWD)</label>
+              <input type="number" id="base-price" required />
+            </div>
+            <div class="form-group">
+              <label for="service-fee">代購服務費 (TWD)</label>
+              <input type="number" id="service-fee" required />
+            </div>
+          </div>
+          <button type="submit" class="action-button">儲存新商品</button>
+          <button
+            type="button"
+            id="update-btn"
+            class="action-button"
+            style="background-color: #17a2b8; display: none"
+          >
+            更新此商品
+          </button>
+          <button type="button" id="cancel-edit-btn" style="display: none">
+            取消編輯
+          </button>
+        </form>
+        <hr />
+        <h3>現有商品列表</h3>
+        <table id="products-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>名稱</th>
+              <th>基礎價</th>
+              <th>服務費</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="products-list"></tbody>
+        </table>
+      </div>
+
+      <div class="admin-section">
+        <h2>訂單列表</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>下單時間</th>
+              <th>跑跑虎 ID</th>
+              <th>末五碼</th>
+              <th>總額</th>
+              <th>購買商品</th>
+            </tr>
+          </thead>
+          <tbody id="orders-list"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <script src="static/admin.js" defer></script>
+  </body>
+</html>

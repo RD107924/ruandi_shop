@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>結帳 - 軟迪華強北直購</title>
+    <link rel="stylesheet" href="static/style.css" />
+  </head>
+  <body>
+    <div
+      class="container"
+      style="
+        max-width: 800px;
+        background-color: white;
+        padding: 20px 40px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h1>訂單結帳</h1>
+
+      <h2>您的購物車明細</h2>
+      <table
+        style="width: 100%; border-collapse: collapse; margin-bottom: 20px"
+      >
+        <thead>
+          <tr>
+            <th
+              style="
+                border-bottom: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+                background-color: #f8f9fa;
+              "
+            >
+              商品名稱
+            </th>
+            <th
+              style="
+                border-bottom: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+                background-color: #f8f9fa;
+              "
+            >
+              單價
+            </th>
+            <th
+              style="
+                border-bottom: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+                background-color: #f8f9fa;
+              "
+            >
+              數量
+            </th>
+            <th
+              style="
+                border-bottom: 1px solid #ddd;
+                padding: 12px;
+                text-align: left;
+                background-color: #f8f9fa;
+              "
+            >
+              小計
+            </th>
+          </tr>
+        </thead>
+        <tbody id="cart-items"></tbody>
+        <tfoot>
+          <tr style="font-weight: bold; font-size: 1.2em">
+            <td colspan="3" style="border-top: 2px solid #333; padding: 12px">
+              訂單總金額
+            </td>
+            <td
+              id="cart-total"
+              style="border-top: 2px solid #333; padding: 12px"
+            ></td>
+          </tr>
+        </tfoot>
+      </table>
+
+      <div>
+        <h2>收件與付款資訊</h2>
+        <div class="notice">
+          <p><strong>您的收款資訊：</strong></p>
+          <p>銀行：郵局 (700)</p>
+          <p>帳號：0031479 0138491</p>
+        </div>
+        <form id="checkout-form">
+          <div class="form-group">
+            <label for="paopaohu-id">跑跑虎集運會員編號 (必填)</label>
+            <input
+              type="text"
+              id="paopaohu-id"
+              required
+              placeholder="請輸入您在跑跑虎的會員編號"
+              style="
+                width: 95%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+              "
+            />
+          </div>
+          <div class="form-group">
+            <label for="payment-code">您的匯款帳號末五碼 (必填)</label>
+            <input
+              type="text"
+              id="payment-code"
+              required
+              maxlength="5"
+              pattern="[0-9]{5}"
+              placeholder="請輸入5位數字"
+              style="
+                width: 95%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+              "
+            />
+          </div>
+          <button
+            type="submit"
+            class="action-button"
+            style="background-color: #28a745"
+          >
+            確認下單，送出訂單
+          </button>
+        </form>
+      </div>
+    </div>
+    <script src="static/checkout.js" defer></script>
+  </body>
+</html>
