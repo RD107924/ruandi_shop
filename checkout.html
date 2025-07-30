@@ -16,7 +16,7 @@
       }
       .quantity-display {
         display: inline-block;
-        width: 30px;
+        min-width: 30px;
         text-align: center;
       }
       .remove-btn {
@@ -29,99 +29,50 @@
     </style>
   </head>
   <body>
-    <div
-      class="container"
-      style="
-        max-width: 800px;
-        background-color: white;
-        padding: 20px 40px;
-        border-radius: 8px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      "
-    >
+    <div class="container" style="max-width: 800px">
       <h1>訂單結帳</h1>
       <a href="index.html">返回商店首頁</a>
-      <h2>您的購物車明細</h2>
-      <table
-        id="cart-summary-table"
-        style="width: 100%; border-collapse: collapse; margin-bottom: 20px"
-      >
-        <thead>
-          <tr>
-            <th
-              style="
-                border-bottom: 1px solid #ddd;
-                padding: 12px;
-                text-align: left;
-                background-color: #f8f9fa;
-              "
-            >
-              商品名稱
-            </th>
-            <th
-              style="
-                border-bottom: 1px solid #ddd;
-                padding: 12px;
-                text-align: left;
-                background-color: #f8f9fa;
-              "
-            >
-              單價
-            </th>
-            <th
-              style="
-                border-bottom: 1px solid #ddd;
-                padding: 12px;
-                text-align: left;
-                background-color: #f8f9fa;
-              "
-            >
-              數量
-            </th>
-            <th
-              style="
-                border-bottom: 1px solid #ddd;
-                padding: 12px;
-                text-align: left;
-                background-color: #f8f9fa;
-              "
-            >
-              小計
-            </th>
-            <th
-              style="
-                border-bottom: 1px solid #ddd;
-                padding: 12px;
-                text-align: left;
-                background-color: #f8f9fa;
-              "
-            >
-              操作
-            </th>
-          </tr>
-        </thead>
-        <tbody id="cart-items"></tbody>
-        <tfoot>
-          <tr style="font-weight: bold; font-size: 1.2em">
-            <td
-              colspan="4"
-              style="
-                border-top: 2px solid #333;
-                padding: 12px;
-                text-align: right;
-              "
-            >
-              訂單總金額
-            </td>
-            <td
-              id="cart-total"
-              style="border-top: 2px solid #333; padding: 12px"
-            ></td>
-          </tr>
-        </tfoot>
-      </table>
+      <div class="admin-section" style="padding-top: 0">
+        <h2>您的購物車明細</h2>
+        <table id="cart-summary-table">
+          <thead>
+            <tr>
+              <th>商品名稱</th>
+              <th>單價</th>
+              <th>數量</th>
+              <th>小計</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="cart-items"></tbody>
+          <tfoot>
+            <tr style="font-weight: bold; font-size: 1.2em">
+              <td
+                data-label="總計"
+                colspan="4"
+                style="
+                  text-align: right;
+                  border-top: 2px solid #333;
+                  padding: 12px;
+                "
+              >
+                訂單總金額
+              </td>
+              <td
+                id="cart-total"
+                data-label="總金額"
+                style="border-top: 2px solid #333; padding: 12px"
+              ></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
 
-      <form id="checkout-form">
+      <form
+        id="checkout-form"
+        class="admin-section"
+        style="box-shadow: none; border: 1px solid #ddd"
+      >
         <div class="form-group">
           <label for="paopaohu-id">跑跑虎集運會員編號 (必填)</label>
           <input
@@ -153,11 +104,11 @@
         >
           <p style="margin-top: 0; font-weight: bold">⚠️ 最終確認</p>
           <p>
-            我確認本服務僅負責代為採購商品並寄送至指定之跑跑虎集運倉，後續大陸繼台灣運費將由我自行在跑跑虎APP操作並支付。
+            我確認本服務僅負責代為採購商品並寄送至指定之跑跑虎集運倉，後續國際運費與台灣本地運費將由我自行在跑跑虎APP操作並支付。
           </p>
           <label for="final-confirmation-input"
             >為確保您已了解，請在此處輸入「<strong style="color: #d9534f"
-              >我了解</strong
+              >我充分了解，商品僅下單至跑跑虎集運會員編號下</strong
             >」以啟用下單按鈕：</label
           >
           <input
