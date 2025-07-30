@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   // !! 部署時請務必替換成您在Render上的後端網址 !!
-  const API_BASE_URL = "http://127.0.0.1:5000";
+  const API_BASE_URL = "https://ruandi-shop-backend-ro8b.onrender.com";
 
   // 簡易密碼保護
   const correctPassword = "12345"; // !! 請務必修改成您自己的高強度密碼 !!
