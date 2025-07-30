@@ -18,8 +18,12 @@
       "
     >
       <h1>訂單結帳</h1>
+      <a href="index.html">返回商店首頁</a>
       <h2>您的購物車明細</h2>
-      <table id="cart-summary-table">
+      <table
+        id="cart-summary-table"
+        style="width: 100%; border-collapse: collapse; margin-bottom: 20px"
+      >
         <thead>
           <tr>
             <th
@@ -125,7 +129,14 @@
             placeholder="請完整輸入上方引號中的文字"
           />
         </div>
-        <button type="submit" id="submit-order-btn" class="submit-btn" disabled>
+
+        <button
+          type="submit"
+          id="submit-order-btn"
+          class="action-button"
+          style="background-color: #6c757d"
+          disabled
+        >
           確認下單，送出訂單
         </button>
       </form>

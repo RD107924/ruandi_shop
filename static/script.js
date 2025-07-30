@@ -1,10 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
   // !! 部署時請務必替換成您在Render上的後端網址 !!
-  const API_BASE_URL = "https://ruandi-shop-backend-ro8b.onrender.com";
+  const API_BASE_URL = "https://ruandi-shop-backend.onrender.com"; // 請確認這是您 Render 後端的正確網址
 
   const productsGrid = document.getElementById("products-grid");
 
-  // 向後端 API 請求商品列表
   fetch(`${API_BASE_URL}/api/products`)
     .then((response) => {
       if (!response.ok) {
@@ -37,7 +36,6 @@ document.addEventListener("DOMContentLoaded", function () {
         "<p>載入商品失敗，請檢查後端伺服器是否已啟動，或稍後再試。</p>";
     });
 
-  // 使用事件委派來監聽所有「加入購物車」按鈕的點擊
   productsGrid.addEventListener("click", function (event) {
     if (event.target.classList.contains("add-to-cart-btn")) {
       const button = event.target;

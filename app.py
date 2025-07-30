@@ -4,18 +4,17 @@ from flask import Flask, jsonify, request, g
 from flask_cors import CORS
 
 # --- 設定 ---
-# 這個路徑是針對 Render.com 的永久硬碟設定
-DATABASE = '/data/database.db' 
+# 版本 2.2
+DATABASE = '/data/database.db' # Render.com 的永久硬碟路徑
 
 app = Flask(__name__)
 CORS(app) # 啟用CORS，允許所有來源的請求
 
-# --- 資料庫連線設定 (樣板程式，幫助我們高效連線) ---
+# --- 資料庫連線設定 ---
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
         db = g._database = sqlite3.connect(DATABASE)
-        # 這個設定讓資料庫回傳的資料可以用欄位名存取，非常方便
         db.row_factory = sqlite3.Row 
     return db
 
@@ -25,7 +24,7 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-# --- API 路由 (網站的功能接口) ---
+# --- API 路由 ---
 
 # == 商品相關 API ==
 @app.route('/api/products', methods=['GET'])
@@ -70,7 +69,6 @@ def get_orders():
     cursor = get_db().execute('SELECT * FROM orders ORDER BY created_at DESC')
     return jsonify([dict(row) for row in cursor.fetchall()])
 
-# *** 全新功能: 查詢特定客戶的訂單 ***
 @app.route('/api/orders/<string:paopaohu_id>', methods=['GET'])
 def get_orders_by_customer(paopaohu_id):
     cursor = get_db().execute(
@@ -79,7 +77,6 @@ def get_orders_by_customer(paopaohu_id):
     )
     orders = [dict(row) for row in cursor.fetchall()]
     return jsonify(orders)
-# **********************************
 
 @app.route('/api/orders', methods=['POST'])
 def add_order():
@@ -106,8 +103,29 @@ def add_order():
 def setup_database_on_render():
     try:
         db = get_db()
-        # ... (此處省略 setup_database 的程式碼，因為您線上已建立)
-        return "這個路由是用來初始化資料庫的。"
+        # 建立 products 資料表
+        db.execute('''
+        CREATE TABLE IF NOT EXISTS products (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            image_url TEXT,
+            base_price INTEGER NOT NULL,
+            service_fee INTEGER NOT NULL
+        );
+        ''')
+        # 建立 orders 資料表
+        db.execute('''
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            paopaohu_id TEXT NOT NULL,
+            payment_code TEXT NOT NULL,
+            total_amount INTEGER NOT NULL,
+            items_json TEXT NOT NULL,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        );
+        ''')
+        db.commit()
+        return "線上資料庫與資料表建立成功！"
     except Exception as e:
         return f"建立資料庫時發生錯誤: {str(e)}"
 

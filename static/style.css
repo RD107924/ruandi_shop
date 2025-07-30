@@ -1,5 +1,3 @@
-/* 此處貼上您在上一則回覆中看到的完整 CSS 程式碼 */
-/* 包含 .body, .container, .notice, .product-card, .admin-section 等所有樣式 */
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -72,9 +70,6 @@ body {
   border-radius: 5px;
   margin-bottom: 20px;
 }
-.container {
-  max-width: 95%;
-}
 table {
   width: 100%;
   border-collapse: collapse;
@@ -139,4 +134,38 @@ tr:nth-child(even) {
 .delete-btn {
   background-color: #dc3545;
   color: white;
+}
+
+/* --- 手機版懸浮結帳按鈕樣式 --- */
+.mobile-checkout-button {
+  display: none;
+}
+@media (max-width: 768px) {
+  .container {
+    padding-bottom: 80px; /* 避免內容被懸浮按鈕遮住 */
+  }
+  .checkout-button {
+    display: none;
+  }
+  .mobile-checkout-button {
+    display: block;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: #28a745;
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-decoration: none;
+    z-index: 1000;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s;
+  }
+  .mobile-checkout-button:active {
+    background-color: #218838;
+  }
 }

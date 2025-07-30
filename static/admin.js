@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", function () {
   // !! 部署時請務必替換成您在Render上的後端網址 !!
-  const API_BASE_URL = "https://ruandi-shop-backend-ro8b.onrender.com";
+  const API_BASE_URL = "https://ruandi-shop-backend.onrender.com"; // 請確認這是您 Render 後端的正確網址
 
-  // 簡易密碼保護
-  const correctPassword = "12345"; // !! 請務必修改成您自己的高強度密碼 !!
+  // 密碼已更新
+  const correctPassword = "randy1007";
   const enteredPassword = prompt("請輸入管理密碼：");
   if (enteredPassword !== correctPassword) {
     alert("密碼錯誤！");
@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  // 抓取頁面上的重要元素
   const productForm = document.getElementById("product-form");
   const productIdInput = document.getElementById("product-id");
   const productNameInput = document.getElementById("name");
@@ -22,11 +21,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const cancelEditBtn = document.getElementById("cancel-edit-btn");
   const productsListContainer = document.getElementById("products-list");
 
-  // 頁面載入時，自動載入訂單和商品
   loadOrders();
   loadProducts();
 
-  // 表單提交事件 (用於新增商品)
   productForm.addEventListener("submit", function (event) {
     event.preventDefault();
     const productData = {
@@ -44,11 +41,10 @@ document.addEventListener("DOMContentLoaded", function () {
       .then((data) => {
         alert(data.message);
         resetForm();
-        loadProducts(); // 重新載入商品列表
+        loadProducts();
       });
   });
 
-  // 更新按鈕的點擊事件
   updateBtn.addEventListener("click", function () {
     const productId = productIdInput.value;
     const productData = {
@@ -70,16 +66,14 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 
-  // 取消編輯按鈕
   cancelEditBtn.addEventListener("click", function () {
     resetForm();
   });
 
-  // 商品列表區的點擊事件 (用於編輯和刪除)
   productsListContainer.addEventListener("click", function (event) {
     const target = event.target;
     const row = target.closest("tr");
-    if (!row) return; // 如果點擊的不是表格內的內容，就忽略
+    if (!row) return;
     const productId = row.dataset.productId;
 
     if (target.classList.contains("delete-btn")) {
@@ -94,15 +88,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     if (target.classList.contains("edit-btn")) {
-      const productToEdit = {
-        id: productId,
-        name: row.cells[1].textContent,
-        base_price: parseInt(row.cells[2].textContent),
-        service_fee: parseInt(row.cells[3].textContent),
-      };
-
-      // 抓取圖片網址需要從API或DOM中其他地方獲取，這裡簡化處理
-      // 為了準確，我們還是從API重新獲取一次
       fetch(`${API_BASE_URL}/api/products`)
         .then((res) => res.json())
         .then((products) => {
@@ -118,15 +103,12 @@ document.addEventListener("DOMContentLoaded", function () {
               "none";
             updateBtn.style.display = "inline-block";
             cancelEditBtn.style.display = "inline-block";
-
-            // 讓頁面滾動到表單位置，方便編輯
             productForm.scrollIntoView({ behavior: "smooth" });
           }
         });
     }
   });
 
-  // 函式：載入並顯示商品列表
   function loadProducts() {
     fetch(`${API_BASE_URL}/api/products`)
       .then((res) => res.json())
@@ -136,10 +118,8 @@ document.addEventListener("DOMContentLoaded", function () {
           const row = document.createElement("tr");
           row.dataset.productId = p.id;
           row.innerHTML = `
-                        <td>${p.id}</td>
-                        <td>${p.name}</td>
-                        <td>${p.base_price}</td>
-                        <td>${p.service_fee}</td>
+                        <td>${p.id}</td><td>${p.name}</td>
+                        <td>${p.base_price}</td><td>${p.service_fee}</td>
                         <td>
                             <button class="edit-btn">編輯</button>
                             <button class="delete-btn">刪除</button>
@@ -150,7 +130,6 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   }
 
-  // 函式：重設表單
   function resetForm() {
     productForm.reset();
     productIdInput.value = "";
@@ -160,7 +139,6 @@ document.addEventListener("DOMContentLoaded", function () {
     cancelEditBtn.style.display = "none";
   }
 
-  // 函式：載入訂單列表
   function loadOrders() {
     const ordersListContainer = document.getElementById("orders-list");
     fetch(`${API_BASE_URL}/api/orders`)
@@ -180,12 +158,8 @@ document.addEventListener("DOMContentLoaded", function () {
           });
           const rowHTML = `
                     <tr>
-                        <td>${order.id}</td>
-                        <td>${orderTime}</td>
-                        <td>${order.paopaohu_id}</td>
-                        <td>${order.payment_code}</td>
-                        <td>$${order.total_amount} TWD</td>
-                        <td>${itemsHTML}</td>
+                        <td>${order.id}</td><td>${orderTime}</td><td>${order.paopaohu_id}</td>
+                        <td>${order.payment_code}</td><td>$${order.total_amount} TWD</td><td>${itemsHTML}</td>
                     </tr>`;
           ordersListContainer.insertAdjacentHTML("beforeend", rowHTML);
         });
