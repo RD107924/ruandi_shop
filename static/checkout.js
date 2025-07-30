@@ -1,153 +1,54 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const API_BASE_URL = "https://ruandi-shop-backend-ro8b.onrender.com"; // 請確認這是您 Render 後端的正確網址
-
-  // 抓取頁面元素
-  const cartItemsContainer = document.getElementById("cart-items");
-  const cartTotalElement = document.getElementById("cart-total");
-  const confirmationInput = document.getElementById("final-confirmation-input");
-  const submitBtn = document.getElementById("submit-order-btn");
-  const requiredText = "我了解";
-
-  // 從 localStorage 讀取購物車資料
-  let cart = JSON.parse(localStorage.getItem("ruandiCart")) || {};
-
-  // 核心函式：更新購物車並重新渲染畫面
-  function updateCartAndRerender() {
-    // 1. 清空舊畫面
-    cartItemsContainer.innerHTML = "";
-    let totalAmount = 0;
-
-    // 2. 檢查購物車是否為空
-    if (Object.keys(cart).length === 0) {
-      cartItemsContainer.innerHTML =
-        '<tr><td colspan="5" style="text-align: center;">您的購物車是空的！<a href="index.html">點此返回首頁</a></td></tr>';
-      submitBtn.disabled = true;
-      submitBtn.style.backgroundColor = "#6c757d";
-    } else {
-      // 3. 遍歷購物車，產生新的表格內容
-      for (const productId in cart) {
-        const item = cart[productId];
-        const subtotal = item.price * item.quantity;
-        totalAmount += subtotal;
-        const row = `
-                    <tr>
-                        <td style="border-bottom: 1px solid #ddd; padding: 12px;">${item.name}</td>
-                        <td style="border-bottom: 1px solid #ddd; padding: 12px;">$${item.price}</td>
-                        <td style="border-bottom: 1px solid #ddd; padding: 12px;">
-                            <div class="quantity-controls">
-                                <button class="quantity-change" data-product-id="${productId}" data-change="-1">-</button>
-                                <span class="quantity-display">${item.quantity}</span>
-                                <button class="quantity-change" data-product-id="${productId}" data-change="1">+</button>
-                            </div>
-                        </td>
-                        <td style="border-bottom: 1px solid #ddd; padding: 12px;">$${subtotal}</td>
-                        <td style="border-bottom: 1px solid #ddd; padding: 12px; text-align: center;">
-                            <button class="remove-btn" data-product-id="${productId}">✖</button>
-                        </td>
-                    </tr>
-                `;
-        cartItemsContainer.innerHTML += row;
-      }
-    }
-
-    // 4. 更新總金額
-    cartTotalElement.textContent = `$${totalAmount} TWD`;
-
-    // 5. 將更新後的購物車存回 localStorage
-    localStorage.setItem("ruandiCart", JSON.stringify(cart));
-
-    // 6. 重新檢查確認文字以決定按鈕狀態
-    checkConfirmation();
-  }
-
-  // 函式：檢查確認文字
-  function checkConfirmation() {
-    if (
-      confirmationInput.value.trim() === requiredText &&
-      Object.keys(cart).length > 0
-    ) {
-      submitBtn.disabled = false;
-      submitBtn.style.backgroundColor = "#28a745";
-    } else {
-      submitBtn.disabled = true;
-      submitBtn.style.backgroundColor = "#6c757d";
-    }
-  }
-
-  // 監聽購物車表格的點擊事件 (用於 + - 和移除)
-  cartItemsContainer.addEventListener("click", function (event) {
-    const target = event.target;
-    const productId = target.dataset.productId;
-
-    // 處理數量變更
-    if (target.classList.contains("quantity-change")) {
-      const change = parseInt(target.dataset.change);
-      if (cart[productId]) {
-        cart[productId].quantity += change;
-        if (cart[productId].quantity <= 0) {
-          delete cart[productId]; // 如果數量小於等於0，就移除商品
-        }
-      }
-    }
-
-    // 處理移除商品
-    if (target.classList.contains("remove-btn")) {
-      if (
-        cart[productId] &&
-        confirm(`確定要從購物車中移除「${cart[productId].name}」嗎？`)
-      ) {
-        delete cart[productId];
-      }
-    }
-
-    // 只要有變動，就更新整個購物車畫面
-    updateCartAndRerender();
-  });
-
-  // 監聽確認輸入框的輸入
-  confirmationInput.addEventListener("input", checkConfirmation);
-
-  // 監聽表單提交事件
-  document
-    .getElementById("checkout-form")
-    .addEventListener("submit", function (event) {
-      event.preventDefault();
-
-      const paopaohuId = document.getElementById("paopaohu-id").value;
-      const paymentCode = document.getElementById("payment-code").value;
-      const totalAmount = Object.values(cart).reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-      );
-
-      const orderData = {
-        paopaohuId: paopaohuId,
-        paymentCode: paymentCode,
-        totalAmount: totalAmount,
-        items: cart,
-      };
-
-      fetch(`${API_BASE_URL}/api/orders`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(orderData),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === "success") {
-            alert("下單成功！感謝您的訂購。");
-            localStorage.removeItem("ruandiCart");
-            window.location.href = "index.html";
-          } else {
-            alert("下單失敗，錯誤訊息：" + (data.message || "未知錯誤"));
-          }
-        })
-        .catch((error) => {
-          console.error("訂單提交錯誤:", error);
-          alert("發生網路錯誤，請檢查後端伺服器是否正常運作。");
-        });
-    });
-
-  // 頁面初次載入時，執行一次渲染
-  updateCartAndRerender();
-});
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>結帳 - 軟迪華強北直購</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 800px;">
+        <h1>訂單結帳</h1>
+        <a href="index.html">返回商店首頁</a>
+        <h2>您的購物車明細</h2>
+        <table id="cart-summary-table">
+            <thead>
+                <tr>
+                    <th>商品名稱</th>
+                    <th>單價</th>
+                    <th>數量</th>
+                    <th>小計</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                </tbody>
+            <tfoot>
+                <tr style="font-weight: bold; font-size: 1.2em;">
+                    <td data-label="總計" colspan="4" style="text-align: right;">訂單總金額</td>
+                    <td id="cart-total"></td>
+                </tr>
+            </tfoot>
+        </table>
+        
+        <form id="checkout-form" class="admin-section" style="box-shadow: none; border: 1px solid #ddd;">
+            <div class="form-group">
+                <label for="paopaohu-id">跑跑虎集運會員編號 (必填)</label>
+                <input type="text" id="paopaohu-id" required placeholder="請輸入您在跑跑虎的會員編號">
+            </div>
+            <div class="form-group">
+                <label for="payment-code">您的匯款帳號末五碼 (必填)</label>
+                <input type="text" id="payment-code" required maxlength="5" pattern="[0-9]{5}" placeholder="請輸入5位數字">
+            </div>
+            <div class="form-group" style="background-color: #fffbe6; padding: 15px; border-radius: 5px; border: 1px solid #ffc107;">
+                <p style="margin-top: 0; font-weight: bold;">⚠️ 最終確認</p>
+                <p>我確認本服務僅負責代為採購商品並寄送至指定之跑跑虎集運倉，後續國際運費與台灣本地運費將由我自行在跑跑虎APP操作並支付。</p>
+                <label for="final-confirmation-input">為確保您已了解，請在此處輸入「<strong style="color: #d9534f;">我充分了解，商品僅下單至跑跑虎集運會員編號下</strong>」以啟用下單按鈕：</label>
+                <input type="text" id="final-confirmation-input" autocomplete="off" placeholder="請完整輸入上方引號中的文字">
+            </div>
+            <button type="submit" id="submit-order-btn" class="action-button" style="background-color: #6c757d;" disabled>確認下單，送出訂單</button>
+        </form>
+    </div>
+    <script src="static/checkout.js" defer></script>
+</body>
+</html>

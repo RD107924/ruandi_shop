@@ -75,6 +75,7 @@ table {
   border-collapse: collapse;
   margin-top: 20px;
   font-size: 14px;
+  background-color: white;
 }
 th,
 td {
@@ -140,10 +141,37 @@ tr:nth-child(even) {
 .mobile-checkout-button {
   display: none;
 }
+
+/* ========================================= */
+/* ===== 手機版優化 (Mobile Optimization) ===== */
+/* ========================================= */
 @media (max-width: 768px) {
+  body {
+    font-size: 16px; /* 稍微加大手機上的基礎字體 */
+    padding: 10px;
+  }
   .container {
     padding-bottom: 80px; /* 避免內容被懸浮按鈕遮住 */
   }
+  h1 {
+    font-size: 1.8em;
+  }
+  h2 {
+    font-size: 1.5em;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr; /* 表單在手機上變為單欄 */
+  }
+
+  /* --- 按鈕優化 --- */
+  .action-button,
+  .checkout-button {
+    padding: 15px 20px; /* 加大按鈕的點擊區域 */
+    font-size: 1.1em;
+  }
+
+  /* --- 懸浮按鈕 --- */
   .checkout-button {
     display: none;
   }
@@ -167,5 +195,46 @@ tr:nth-child(even) {
   }
   .mobile-checkout-button:active {
     background-color: #218838;
+  }
+
+  /* --- 響應式表格優化 --- */
+  table thead {
+    display: none; /* 隱藏電腦版的表頭 */
+  }
+  table,
+  table tbody,
+  table tr,
+  table td {
+    display: block; /* 將表格元素變為區塊，使其可以垂直排列 */
+    width: 100%;
+  }
+  table tr {
+    margin-bottom: 15px; /* 每張卡片之間增加間距 */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  table td {
+    text-align: right; /* 讓內容靠右，標籤靠左 */
+    padding-left: 50%; /* 留出空間給標籤 */
+    position: relative;
+    border: none;
+    border-bottom: 1px solid #eee;
+  }
+  table td:before {
+    content: attr(data-label); /* 讀取 data-label 的內容作為標籤 */
+    position: absolute;
+    left: 10px;
+    width: calc(50% - 20px);
+    text-align: left;
+    font-weight: bold;
+  }
+  table td:last-child {
+    border-bottom: none;
+  }
+  /* 針對數量控制按鈕的特殊調整 */
+  .quantity-controls {
+    display: flex;
+    justify-content: flex-end; /* 讓 + - 按鈕靠右 */
+    align-items: center;
   }
 }
