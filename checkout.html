@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>結帳 - 軟迪華強北直購</title>
+    <title>訂單結帳 - 軟迪華強北直購</title>
     <link rel="stylesheet" href="static/style.css" />
     <style>
       /* 針對數量按鈕的微調樣式 */
@@ -25,6 +25,43 @@
         color: #dc3545;
         cursor: pointer;
         font-size: 1.2em;
+      }
+
+      /* 收款資訊與複製按鈕樣式 */
+      .payment-info-box {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 5px;
+      }
+      .payment-info-box h4 {
+        margin-top: 0;
+      }
+      .account-line {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.1em;
+        flex-wrap: wrap;
+      }
+      #bank-account-number {
+        font-weight: bold;
+        color: #007bff;
+        letter-spacing: 1px;
+      }
+      #copy-account-btn {
+        padding: 5px 10px;
+        border: 1px solid #007bff;
+        background-color: white;
+        color: #007bff;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      #copy-account-btn:hover {
+        background-color: #007bff;
+        color: white;
       }
     </style>
   </head>
@@ -73,6 +110,16 @@
         class="admin-section"
         style="box-shadow: none; border: 1px solid #ddd"
       >
+        <div class="payment-info-box">
+          <h4>請匯款至以下帳戶</h4>
+          <p>銀行：中華郵政 (700)</p>
+          <div class="account-line">
+            <span>帳號：</span>
+            <span id="bank-account-number">00314790138491</span>
+            <button type="button" id="copy-account-btn">一鍵複製</button>
+          </div>
+        </div>
+
         <div class="form-group">
           <label for="paopaohu-id">跑跑虎集運會員編號 (必填)</label>
           <input
@@ -122,6 +169,7 @@
             placeholder="請輸入『我了解』"
           />
         </div>
+
         <button
           type="submit"
           id="submit-order-btn"

@@ -2,15 +2,16 @@ document.addEventListener("DOMContentLoaded", function () {
   // !! 部署時請務必替換成您在Render上的後端網址 !!
   const API_BASE_URL = "https://ruandi-shop-backend-ro8b.onrender.com"; // 請確認這是您 Render 後端的正確網址
 
-  // 抓取頁面元素
+  // --- 抓取頁面所有元素 ---
   const cartItemsContainer = document.getElementById("cart-items");
   const cartTotalElement = document.getElementById("cart-total");
   const confirmationInput = document.getElementById("final-confirmation-input");
   const submitBtn = document.getElementById("submit-order-btn");
+  const copyBtn = document.getElementById("copy-account-btn");
+  const bankAccountSpan = document.getElementById("bank-account-number");
 
-  // ******** 👇 這裡必須同步修改！ ********
+  // --- 需要驗證的文字 ---
   const requiredText = "我了解";
-  // **********************************
 
   // 從 localStorage 讀取購物車資料
   let cart = JSON.parse(localStorage.getItem("ruandiCart")) || {};
@@ -151,6 +152,26 @@ document.addEventListener("DOMContentLoaded", function () {
           alert("發生網路錯誤，請檢查後端伺服器是否正常運作。");
         });
     });
+
+  // 一鍵複製功能
+  copyBtn.addEventListener("click", function () {
+    const accountNumber = bankAccountSpan.textContent;
+    navigator.clipboard.writeText(accountNumber).then(
+      function () {
+        const originalText = copyBtn.textContent;
+        copyBtn.textContent = "已複製！";
+        copyBtn.style.backgroundColor = "#28a745";
+        setTimeout(function () {
+          copyBtn.textContent = originalText;
+          copyBtn.style.backgroundColor = "";
+        }, 2000);
+      },
+      function (err) {
+        alert("複製失敗，請手動複製帳號。");
+        console.error("無法複製帳號: ", err);
+      }
+    );
+  });
 
   // 頁面初次載入時，執行一次渲染
   updateCartAndRerender();
