@@ -18,95 +18,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 核心函式：更新購物車並重新渲染畫面
   function updateCartAndRerender() {
-    // 1. 清空舊畫面
-    cartItemsContainer.innerHTML = "";
-    let totalAmount = 0;
-
-    // 2. 檢查購物車是否為空
-    if (Object.keys(cart).length === 0) {
-      cartItemsContainer.innerHTML =
-        '<tr><td colspan="5" style="text-align: center;">您的購物車是空的！<a href="index.html">點此返回首頁</a></td></tr>';
-    } else {
-      // 3. 遍歷購物車，產生新的表格內容
-      for (const productId in cart) {
-        const item = cart[productId];
-        const subtotal = item.price * item.quantity;
-        totalAmount += subtotal;
-        const row = document.createElement("tr");
-        row.innerHTML = `
-                    <td data-label="商品名稱">${item.name}</td>
-                    <td data-label="單價">$${item.price}</td>
-                    <td data-label="數量">
-                        <div class="quantity-controls">
-                            <button class="quantity-change" data-product-id="${productId}" data-change="-1">-</button>
-                            <span class="quantity-display">${item.quantity}</span>
-                            <button class="quantity-change" data-product-id="${productId}" data-change="1">+</button>
-                        </div>
-                    </td>
-                    <td data-label="小計">$${subtotal}</td>
-                    <td data-label="操作" style="text-align: center;">
-                        <button class="remove-btn" data-product-id="${productId}">✖</button>
-                    </td>
-                `;
-        cartItemsContainer.appendChild(row);
-      }
-    }
-
-    // 4. 更新總金額
-    cartTotalElement.textContent = `$${totalAmount} TWD`;
-
-    // 5. 將更新後的購物車存回 localStorage
-    localStorage.setItem("ruandiCart", JSON.stringify(cart));
-
-    // 6. 重新檢查確認文字以決定按鈕狀態
-    checkConfirmation();
+    // ... (此函數內容不變)
   }
 
   // 函式：檢查確認文字
   function checkConfirmation() {
-    if (
-      confirmationInput.value.trim() === requiredText &&
-      Object.keys(cart).length > 0
-    ) {
-      submitBtn.disabled = false;
-      submitBtn.style.backgroundColor = "#28a745";
-    } else {
-      submitBtn.disabled = true;
-      submitBtn.style.backgroundColor = "#6c757d";
-    }
+    // ... (此函數內容不變)
   }
 
   // 監聽購物車表格的點擊事件 (用於 + - 和移除)
   cartItemsContainer.addEventListener("click", function (event) {
-    const target = event.target;
-
-    if (
-      target.classList.contains("quantity-change") ||
-      target.classList.contains("remove-btn")
-    ) {
-      const productId = target.dataset.productId;
-
-      if (target.classList.contains("quantity-change")) {
-        const change = parseInt(target.dataset.change);
-        if (cart[productId]) {
-          cart[productId].quantity += change;
-          if (cart[productId].quantity <= 0) {
-            delete cart[productId];
-          }
-        }
-      }
-
-      if (target.classList.contains("remove-btn")) {
-        if (
-          cart[productId] &&
-          confirm(`確定要從購物車中移除「${cart[productId].name}」嗎？`)
-        ) {
-          delete cart[productId];
-        }
-      }
-
-      updateCartAndRerender();
-    }
+    // ... (此函數內容不變)
   });
 
   // 監聽確認輸入框的輸入
@@ -140,7 +62,9 @@ document.addEventListener("DOMContentLoaded", function () {
         .then((response) => response.json())
         .then((data) => {
           if (data.status === "success") {
-            alert("下單成功！感謝您的訂購。");
+            // ******** 👇 修改的就是這一行！ ********
+            alert("下單成功!感謝您的訂購，商品將在1~2天內送達深圳倉。");
+            // ************************************
             localStorage.removeItem("ruandiCart");
             window.location.href = "index.html";
           } else {
@@ -154,6 +78,78 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
   // 一鍵複製功能
+  copyBtn.addEventListener("click", function () {
+    // ... (此函數內容不變)
+  });
+
+  // 頁面初次載入時，執行一次渲染
+  updateCartAndRerender();
+
+  // ----------------------------------------------------
+  // 以下為未變動的函數完整內容
+  // ----------------------------------------------------
+  function updateCartAndRerender() {
+    cartItemsContainer.innerHTML = "";
+    let totalAmount = 0;
+    if (Object.keys(cart).length === 0) {
+      cartItemsContainer.innerHTML =
+        '<tr><td colspan="5" style="text-align: center;">您的購物車是空的！<a href="index.html">點此返回首頁</a></td></tr>';
+    } else {
+      for (const productId in cart) {
+        const item = cart[productId];
+        const subtotal = item.price * item.quantity;
+        totalAmount += subtotal;
+        const row = document.createElement("tr");
+        row.innerHTML = `<td data-label="商品名稱">${item.name}</td><td data-label="單價">$${item.price}</td><td data-label="數量"><div class="quantity-controls"><button class="quantity-change" data-product-id="${productId}" data-change="-1">-</button><span class="quantity-display">${item.quantity}</span><button class="quantity-change" data-product-id="${productId}" data-change="1">+</button></div></td><td data-label="小計">$${subtotal}</td><td data-label="操作" style="text-align: center;"><button class="remove-btn" data-product-id="${productId}">✖</button></td>`;
+        cartItemsContainer.appendChild(row);
+      }
+    }
+    cartTotalElement.textContent = `$${totalAmount} TWD`;
+    localStorage.setItem("ruandiCart", JSON.stringify(cart));
+    checkConfirmation();
+  }
+
+  function checkConfirmation() {
+    if (
+      confirmationInput.value.trim() === requiredText &&
+      Object.keys(cart).length > 0
+    ) {
+      submitBtn.disabled = false;
+      submitBtn.style.backgroundColor = "#28a745";
+    } else {
+      submitBtn.disabled = true;
+      submitBtn.style.backgroundColor = "#6c757d";
+    }
+  }
+
+  cartItemsContainer.addEventListener("click", function (event) {
+    const target = event.target;
+    if (
+      target.classList.contains("quantity-change") ||
+      target.classList.contains("remove-btn")
+    ) {
+      const productId = target.dataset.productId;
+      if (target.classList.contains("quantity-change")) {
+        const change = parseInt(target.dataset.change);
+        if (cart[productId]) {
+          cart[productId].quantity += change;
+          if (cart[productId].quantity <= 0) {
+            delete cart[productId];
+          }
+        }
+      }
+      if (target.classList.contains("remove-btn")) {
+        if (
+          cart[productId] &&
+          confirm(`確定要從購物車中移除「${cart[productId].name}」嗎？`)
+        ) {
+          delete cart[productId];
+        }
+      }
+      updateCartAndRerender();
+    }
+  });
+
   copyBtn.addEventListener("click", function () {
     const accountNumber = bankAccountSpan.textContent;
     navigator.clipboard.writeText(accountNumber).then(
@@ -172,7 +168,4 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     );
   });
-
-  // 頁面初次載入時，執行一次渲染
-  updateCartAndRerender();
 });

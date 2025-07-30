@@ -1,3 +1,6 @@
+/* ========================================= */
+/* ===== 基礎樣式 (Base Styles) ===== */
+/* ========================================= */
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
@@ -69,6 +72,7 @@ body {
   font-size: 1.2em;
   border-radius: 5px;
   margin-bottom: 20px;
+  margin-right: 10px;
 }
 table {
   width: 100%;
@@ -95,6 +99,8 @@ tr:nth-child(even) {
   padding-left: 0;
   margin: 0;
 }
+
+/* --- 後台與表單樣式 --- */
 .admin-section {
   background-color: white;
   padding: 20px;
@@ -136,6 +142,8 @@ tr:nth-child(even) {
   background-color: #dc3545;
   color: white;
 }
+
+/* --- 結帳頁面樣式 --- */
 .quantity-controls button {
   background-color: #e9ecef;
   border: 1px solid #ced4da;
@@ -155,8 +163,43 @@ tr:nth-child(even) {
   cursor: pointer;
   font-size: 1.2em;
 }
+.payment-info-box {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+.payment-info-box h4 {
+  margin-top: 0;
+}
+.account-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1em;
+  flex-wrap: wrap;
+}
+#bank-account-number {
+  font-weight: bold;
+  color: #007bff;
+  letter-spacing: 1px;
+}
+#copy-account-btn {
+  padding: 5px 10px;
+  border: 1px solid #007bff;
+  background-color: white;
+  color: #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+#copy-account-btn:hover {
+  background-color: #007bff;
+  color: white;
+}
 
-/* --- 手機版懸浮結帳按鈕樣式 --- */
+/* --- 手機版懸浮結帳按鈕樣式 (預設隱藏) --- */
 .mobile-checkout-button {
   display: none;
 }
@@ -170,7 +213,7 @@ tr:nth-child(even) {
     padding: 10px;
   }
   .container {
-    padding-bottom: 80px;
+    padding-bottom: 80px; /* 避免內容被懸浮按鈕遮住 */
   }
   h1 {
     font-size: 1.8em;
@@ -180,7 +223,7 @@ tr:nth-child(even) {
   }
 
   .form-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* 表單在手機上變為單欄 */
   }
 
   /* --- 按鈕優化 --- */
@@ -190,10 +233,11 @@ tr:nth-child(even) {
     font-size: 1.1em;
   }
 
-  /* --- 懸浮按鈕 --- */
-  .checkout-button {
-    display: none;
+  /* --- 懸浮按鈕與電腦版按鈕顯示邏輯 --- */
+  #desktop-checkout-btn {
+    display: none; /* 在手機上，只隱藏 ID 為 desktop-checkout-btn 的按鈕 */
   }
+
   .mobile-checkout-button {
     display: block;
     position: fixed;
@@ -216,7 +260,7 @@ tr:nth-child(even) {
     background-color: #218838;
   }
 
-  /* ===== 全新、更強化的響應式表格樣式 ===== */
+  /* --- 響應式表格樣式 --- */
   table thead {
     display: none; /* 隱藏電腦版的表頭 */
   }
