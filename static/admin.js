@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td>${p.service_fee}</td>
                         <td>
                             <button class="edit-btn">編輯</button>
-                            <button class="delete-btn">刪除</button>
+                            <button class.delete-btn">刪除</button>
                         </td>
                     `;
           productsListContainer.appendChild(row);
@@ -204,8 +204,9 @@ document.addEventListener("DOMContentLoaded", function () {
     cancelEditBtn.style.display = "none";
   }
 
-  // 函式：載入訂單列表 (*** 修正版 ***)
+  // 函式：載入訂單列表 (*** 真正修正版 ***)
   function loadOrders() {
+    const ordersListContainer = document.getElementById("orders-list");
     fetch(`${API_BASE_URL}/api/orders`)
       .then((res) => res.json())
       .then((orders) => {
