@@ -2,13 +2,13 @@ document.addEventListener("DOMContentLoaded", function () {
   // !! 部署時請務必替換成您在Render上的後端網址 !!
   const API_BASE_URL = "https://ruandi-shop-backend-ro8b.onrender.com"; // 請確認這是您 Render 後端的正確網址
 
-  // 密碼已更新為 randy1007
+  // 密碼為 randy1007
   const correctPassword = "randy1007";
   const enteredPassword = prompt("請輸入管理密碼：");
   if (enteredPassword !== correctPassword) {
     alert("密碼錯誤！");
     window.location.href = "index.html";
-    return; // 終止後續所有程式碼的執行
+    return;
   }
 
   // 抓取頁面上的所有重要元素
@@ -130,7 +130,6 @@ document.addEventListener("DOMContentLoaded", function () {
     if (!row) return;
     const productId = row.dataset.productId;
 
-    // 如果點擊的是刪除按鈕
     if (target.classList.contains("delete-btn")) {
       if (confirm(`確定要刪除 ID 為 ${productId} 的商品嗎？`)) {
         fetch(`${API_BASE_URL}/api/products/${productId}`, { method: "DELETE" })
@@ -142,7 +141,6 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // 如果點擊的是編輯按鈕
     if (target.classList.contains("edit-btn")) {
       fetch(`${API_BASE_URL}/api/products`)
         .then((res) => res.json())
@@ -206,28 +204,35 @@ document.addEventListener("DOMContentLoaded", function () {
     cancelEditBtn.style.display = "none";
   }
 
-  // 函式：載入訂單列表
+  // 函式：載入訂單列表 (*** 修正版 ***)
   function loadOrders() {
     fetch(`${API_BASE_URL}/api/orders`)
       .then((res) => res.json())
       .then((orders) => {
         ordersListContainer.innerHTML = "";
-        if (orders.length === 0) {
+
+        if (!orders || orders.length === 0) {
           ordersListContainer.innerHTML =
             '<tr><td colspan="6" style="text-align: center;">目前沒有任何訂單。</td></tr>';
           return;
         }
+
         orders.forEach((order) => {
           const itemsObject = JSON.parse(order.items_json);
           let itemsHTML = '<ul class="items-list">';
           for (const productId in itemsObject) {
             const item = itemsObject[productId];
-            itemsHTML += `<li>${item.name} (單價: $${item.price}) x ${item.quantity}</li>`;
+            const itemName = item.name || "未知商品";
+            const itemPrice = item.price || 0;
+            const itemQuantity = item.quantity || 0;
+            itemsHTML += `<li>${itemName} (單價: $${itemPrice}) x ${itemQuantity}</li>`;
           }
           itemsHTML += "</ul>";
+
           const orderTime = new Date(order.created_at).toLocaleString("zh-TW", {
             hour12: false,
           });
+
           const rowHTML = `
                     <tr>
                         <td>${order.id}</td>
@@ -237,8 +242,14 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td>$${order.total_amount} TWD</td>
                         <td>${itemsHTML}</td>
                     </tr>`;
+
           ordersListContainer.insertAdjacentHTML("beforeend", rowHTML);
         });
+      })
+      .catch((error) => {
+        console.error("載入訂單時發生錯誤:", error);
+        ordersListContainer.innerHTML =
+          '<tr><td colspan="6" style="text-align: center; color: red;">載入訂單失敗，請檢查 Console。</td></tr>';
       });
   }
 });
