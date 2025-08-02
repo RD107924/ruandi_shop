@@ -183,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         <td>${p.service_fee}</td>
                         <td>
                             <button class="edit-btn">編輯</button>
-                            <button class.delete-btn">刪除</button>
+                            <button class="delete-btn">刪除</button>
                         </td>
                     `;
           productsListContainer.appendChild(row);
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
     cancelEditBtn.style.display = "none";
   }
 
-  // 函式：載入訂單列表 (*** 真正修正版 ***)
+  // 函式：載入訂單列表 (*** 已更新，可顯示商品備註 ***)
   function loadOrders() {
     const ordersListContainer = document.getElementById("orders-list");
     fetch(`${API_BASE_URL}/api/orders`)
@@ -221,12 +221,18 @@ document.addEventListener("DOMContentLoaded", function () {
         orders.forEach((order) => {
           const itemsObject = JSON.parse(order.items_json);
           let itemsHTML = '<ul class="items-list">';
-          for (const productId in itemsObject) {
-            const item = itemsObject[productId];
+          for (const cartItemId in itemsObject) {
+            const item = itemsObject[cartItemId];
             const itemName = item.name || "未知商品";
             const itemPrice = item.price || 0;
             const itemQuantity = item.quantity || 0;
-            itemsHTML += `<li>${itemName} (單價: $${itemPrice}) x ${itemQuantity}</li>`;
+
+            // 如果商品有備註，就顯示出來
+            let remarkText = "";
+            if (item.remark && item.remark.trim() !== "") {
+              remarkText = `<br><small style="color: #007bff; font-weight: bold;">備註：${item.remark}</small>`;
+            }
+            itemsHTML += `<li>${itemName} (單價: $${itemPrice}) x ${itemQuantity}${remarkText}</li>`;
           }
           itemsHTML += "</ul>";
 

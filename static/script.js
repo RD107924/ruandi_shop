@@ -18,6 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
       }
       products.forEach((product) => {
         const finalPrice = product.base_price + product.service_fee;
+
+        // *** 已移除備註輸入框，恢復簡潔 ***
         const cardHTML = `
                     <div class="product-card">
                         <img src="${product.image_url}" alt="${product.name}">
@@ -42,17 +44,28 @@ document.addEventListener("DOMContentLoaded", function () {
       const productId = button.dataset.productId;
       const productName = button.dataset.productName;
       const price = parseInt(button.dataset.price);
-      addToCart(productId, productName, price);
+
+      addToCart(productId, productName, price); // 呼叫不含備註的函式
     }
   });
 });
 
+// *** addToCart 函式恢復簡潔，不再處理備註 ***
 function addToCart(productId, name, price) {
   let cart = JSON.parse(localStorage.getItem("ruandiCart")) || {};
-  if (cart[productId]) {
-    cart[productId].quantity++;
+
+  // 現在購物車的項目 ID 就是商品 ID
+  const cartItemId = productId;
+
+  if (cart[cartItemId]) {
+    cart[cartItemId].quantity++;
   } else {
-    cart[productId] = { name: name, price: price, quantity: 1 };
+    cart[cartItemId] = {
+      name: name,
+      price: price,
+      quantity: 1,
+      remark: "", // 初始化一個空的備註欄位
+    };
   }
   localStorage.setItem("ruandiCart", JSON.stringify(cart));
   alert(`「${name}」已加入購物車！`);
